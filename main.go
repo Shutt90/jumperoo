@@ -12,6 +12,9 @@ const (
 	screenHeight = 600
 )
 
+var x float64
+var y float64
+
 type Game struct{}
 
 var gopher *ebiten.Image
@@ -32,6 +35,10 @@ func init() {
 }
 
 func (g *Game) Update() error {
+	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+		g.jump(gopher)
+	}
+
 	return nil
 }
 
@@ -41,7 +48,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(screenWidth/2.25, screenHeight*0.75)
 
 	screen.DrawImage(gopher, op)
-	
+
 	screen.DrawImage(grassPlatform, nil)
 }
 
@@ -57,4 +64,13 @@ func main() {
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)
 	}
+}
+
+func (g *Game) jump(gopher *ebiten.Image) {
+	opts := &ebiten.DrawImageOptions{}
+
+	var yOffset float64 = 50
+
+	opts.GeoM.Translate(0, yOffset)
+
 }
